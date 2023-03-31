@@ -7,13 +7,13 @@ const { HttpError } = require("../../helpers");
 const addSchema = Joi.object({
  name: Joi.string().min(3).max(30).required(),
   email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
-  phone: Joi.string().required(),
+  phone: Joi.string().pattern(/^\+?[0-9]{10,14}$/).required(),
 });
 
 const schemaUpdate = Joi.object({
   name: Joi.string().min(3).max(30).required(),
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
-  phone: Joi.string(),
+  phone: Joi.string().pattern(/^\+?[0-9]{10,14}$/).required(),
 }).or("name", "email", "phone");
 
 router.get('/', async (req, res, next) => {

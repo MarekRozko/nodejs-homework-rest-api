@@ -1,6 +1,7 @@
 const {Schema, model } = require("mongoose");
 const Joi = require("joi");
 
+const { handleMongooseError } = require("../utils");
 
 const contactSchema = new Schema({
 
@@ -18,10 +19,15 @@ const contactSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
+    },
   
 }, { versionKey: false, timestamps: true });
 
-
+contactSchema.post("save", handleMongooseError);
 
 const addSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
@@ -49,7 +55,7 @@ const schemas = {
 
 
 
-const Contacts = model("contacts", contactSchema);
+const Contacts = model("contact", contactSchema);
 
 module.exports = {
   Contacts,
